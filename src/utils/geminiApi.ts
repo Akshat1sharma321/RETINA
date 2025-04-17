@@ -1,6 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const API_KEY = "AIzaSyD2Oym-8ONbSfCczKFGv5yJvP18axKB6D0";
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export interface LocationData {
   latitude: number;
@@ -12,13 +14,107 @@ export interface LocationData {
 
 export interface Place {
   name: string;
-  type: string;
+  type: "hospital" | "police" | "pharmacy";
   distance: number;
   latitude: number;
   longitude: number;
   vicinity?: string;
   phone?: string;
 }
+
+// Predefined list of emergency centers
+const emergencyCenters: Place[] = [
+  {
+    name: "DTU Health Centre",
+    type: "hospital",
+    distance: 0.2,
+    latitude: 28.749,
+    longitude: 77.116,
+    vicinity: "Delhi Technological University, Shahbad Daulatpur",
+    phone: "+91 11 27871018",
+  },
+  {
+    name: "Ishan Hospital",
+    type: "hospital",
+    distance: 2.9,
+    latitude: 28.765,
+    longitude: 77.105,
+    vicinity: "Sector-18, Rohini",
+    phone: "+91 11 4567 8901",
+  },
+  {
+    name: "Saroj Medical Institute",
+    type: "hospital",
+    distance: 2.8,
+    latitude: 28.76,
+    longitude: 77.1,
+    vicinity: "Sector 14 Extension, Rohini",
+    phone: "+91 11 49444444",
+  },
+  {
+    name: "Rohini Sector 18 Police Station",
+    type: "police",
+    distance: 1.5,
+    latitude: 28.755,
+    longitude: 77.125,
+    vicinity: "Sector 18, Rohini",
+    phone: "+91 11 27045035",
+  },
+  {
+    name: "Jahangirpuri Police Station",
+    type: "police",
+    distance: 3.5,
+    latitude: 28.76,
+    longitude: 77.135,
+    vicinity: "Jahangirpuri",
+    phone: "+91 11 27215641",
+  },
+  {
+    name: "Apollo Pharmacy",
+    type: "pharmacy",
+    distance: 1.1,
+    latitude: 28.745,
+    longitude: 77.12,
+    vicinity: "Near Sector 17 Market, Rohini",
+    phone: "+91 11 27901234",
+  },
+  {
+    name: "MediCare Pharmacy",
+    type: "pharmacy",
+    distance: 2.3,
+    latitude: 28.758,
+    longitude: 77.108,
+    vicinity: "Sector 15, Rohini",
+    phone: "+91 11 28890123",
+  },
+  {
+    name: "Shivam Hospital",
+    type: "hospital",
+    distance: 2.1,
+    latitude: 28.762,
+    longitude: 77.118,
+    vicinity: "Sector 16, Rohini",
+    phone: "+91 11 26543210",
+  },
+  {
+    name: "Sector 11 Rohini Police Chowki",
+    type: "police",
+    distance: 3.3,
+    latitude: 28.74,
+    longitude: 77.1,
+    vicinity: "Sector 11, Rohini",
+    phone: "+91 11 27056789",
+  },
+  {
+    name: "HealthFirst Pharmacy",
+    type: "pharmacy",
+    distance: 0.7,
+    latitude: 28.75,
+    longitude: 77.11,
+    vicinity: "Local Shopping Centre, Near DTU",
+    phone: "+91 11 23450987",
+  },
+];
 
 export async function getDeviceLocation(): Promise<LocationData> {
   try {
@@ -57,36 +153,6 @@ export async function getNearbyPlaces(
   latitude: number,
   longitude: number
 ): Promise<Place[]> {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-    const prompt = `Generate a list of 10 nearby emergency places for the location at latitude ${latitude} and longitude ${longitude} in JSON format. Include a mix of hospitals, police stations, and pharmacies. Each place should have:
-    - name (realistic name for the type of place)
-    - type (hospital, police, or pharmacy)
-    - distance (in meters, between 100 and 5000)
-    - latitude (realistic nearby coordinate)
-    - longitude (realistic nearby coordinate)
-    - vicinity (realistic street address)
-
-    Make the locations appear realistically distributed around the given coordinates (within 5km).
-    Return ONLY the JSON array of places, no additional text.`;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    try {
-      // Parse the JSON response
-      const places: Place[] = JSON.parse(text);
-
-      // Sort places by distance
-      return places.sort((a, b) => a.distance - b.distance);
-    } catch (error) {
-      console.error("Error parsing Gemini response:", error);
-      throw new Error("Failed to parse nearby places data");
-    }
-  } catch (error) {
-    console.error("Error fetching nearby places from Gemini:", error);
-    throw new Error("Failed to get nearby places");
-  }
+  // Return the predefined list of emergency centers
+  return Promise.resolve(emergencyCenters);
 }

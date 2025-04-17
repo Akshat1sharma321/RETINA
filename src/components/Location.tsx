@@ -2,16 +2,9 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Loader2, Navigation, Phone } from "lucide-react";
-import {
-  MapContainer,
-  TileLayer,
-  CircleMarker,
-  Popup,
-  useMap,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import { toast } from "sonner";
 import { getNearbyPlaces, Place } from "@/utils/geminiApi";
+import CurrentLocationMap from "./CurrentLocationMap";
 
 interface LocationData {
   latitude: number;
@@ -20,13 +13,37 @@ interface LocationData {
   speed?: number;
 }
 
-// Component to handle map center updates
-function MapUpdater({ center }: { center: [number, number] }) {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(center);
-  }, [center, map]);
-  return null;
+// DTU Location
+const DTU_LOCATION = {
+  latitude: 28.7499,
+  longitude: 77.1183,
+  name: "Delhi Technological University",
+  address:
+    "P4X9+X2J, Bawana Rd, Delhi Technological University, Shahbad Daulatpur Village, Rohini, New Delhi, Delhi, 110042",
+};
+
+// Calculate distance between two points in kilometers
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 6371; // Radius of the earth in km
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function deg2rad(deg: number): number {
+  return deg * (Math.PI / 180);
 }
 
 const Location = () => {
@@ -186,7 +203,7 @@ const Location = () => {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-navi-400" />
-            Emergency Locations Near You
+            Your Current Location
           </div>
           <Button
             variant="outline"
@@ -221,40 +238,89 @@ const Location = () => {
           </div>
         ) : location ? (
           <div className="space-y-4">
-            <div className="h-[400px] w-full rounded-lg overflow-hidden">
-              <MapContainer
-                center={[location.latitude, location.longitude]}
-                zoom={15}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <CircleMarker
-                  center={[location.latitude, location.longitude]}
-                  radius={8}
-                  pathOptions={{
-                    fillColor: "#4F46E5",
-                    fillOpacity: 1,
-                    color: "white",
-                    weight: 2,
-                  }}
-                >
-                  <Popup>
-                    Your current location
-                    <br />
-                    {location.accuracy &&
-                      `Accuracy: ${location.accuracy.toFixed(0)}m`}
-                  </Popup>
-                </CircleMarker>
-                <MapUpdater center={[location.latitude, location.longitude]} />
-              </MapContainer>
+            {/* Map Component */}
+            <CurrentLocationMap currentLocation={location} />
+
+            {/* Location Details */}
+            <div className="p-4 bg-gray-800/50 rounded-lg border border-white/10">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-400">Latitude</div>
+                  <div className="font-medium">
+                    {location.latitude.toFixed(6)}°
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-400">Longitude</div>
+                  <div className="font-medium">
+                    {location.longitude.toFixed(6)}°
+                  </div>
+                </div>
+                {location.accuracy && (
+                  <div>
+                    <div className="text-sm text-gray-400">Accuracy</div>
+                    <div className="font-medium">
+                      {location.accuracy.toFixed(0)} meters
+                    </div>
+                  </div>
+                )}
+                {location.speed && location.speed > 0 && (
+                  <div>
+                    <div className="text-sm text-gray-400">Speed</div>
+                    <div className="font-medium">
+                      {(location.speed * 3.6).toFixed(1)} km/h
+                    </div>
+                  </div>
+                )}
+                <div className="col-span-2">
+                  <div className="text-sm text-gray-400">Distance to DTU</div>
+                  <div className="font-medium">
+                    {calculateDistance(
+                      location.latitude,
+                      location.longitude,
+                      DTU_LOCATION.latitude,
+                      DTU_LOCATION.longitude
+                    ).toFixed(2)}{" "}
+                    km
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* DTU Information */}
+            <div className="p-4 bg-gray-800/50 rounded-lg border border-white/10">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+                  <MapPin className="h-5 w-5 text-indigo-400" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-lg">{DTU_LOCATION.name}</h3>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {DTU_LOCATION.address}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="mt-3 h-8 px-3 text-navi-400 hover:text-navi-300 bg-navi-400/10"
+                    onClick={() => {
+                      const url = `https://www.google.com/maps/dir/?api=1&destination=${DTU_LOCATION.latitude},${DTU_LOCATION.longitude}`;
+                      if (location) {
+                        url +
+                          `&origin=${location.latitude},${location.longitude}`;
+                      }
+                      window.open(url, "_blank");
+                    }}
+                  >
+                    <Navigation className="h-4 w-4 mr-1" />
+                    Get Directions
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
           <div className="text-center py-4">
-            <p className="text-gray-400">Location not available</p>
+            <p className="text-gray-400">Location data not available</p>
           </div>
         )}
       </CardContent>

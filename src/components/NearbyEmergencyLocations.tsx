@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { getNearbyPlaces, Place } from "@/utils/geminiApi";
+import LocationMap from "./LocationMap";
 
 const NearbyEmergencyLocations = () => {
   const [locations, setLocations] = useState<Place[]>([]);
@@ -28,13 +29,17 @@ const NearbyEmergencyLocations = () => {
     setError(null);
 
     try {
+      console.log("Fetching nearby locations for:", { latitude, longitude });
       // Fetch real data using the Gemini API
       const places = await getNearbyPlaces(latitude, longitude);
+      console.log("Received places:", places);
       setLocations(places);
     } catch (err) {
       console.error("Error fetching nearby locations:", err);
-      setError("Failed to fetch nearby locations");
-      toast.error("Error loading emergency locations");
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch nearby locations";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -43,10 +48,13 @@ const NearbyEmergencyLocations = () => {
   const fetchUserLocation = () => {
     setIsLoading(true);
     setError(null);
+    console.log("Attempting to fetch user location...");
 
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
-      toast.error("Location services not available");
+      const errorMessage = "Geolocation is not supported by your browser";
+      console.error(errorMessage);
+      setError(errorMessage);
+      toast.error(errorMessage);
       setIsLoading(false);
       return;
     }
@@ -54,6 +62,7 @@ const NearbyEmergencyLocations = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        console.log("Location obtained:", { latitude, longitude });
         setUserLocation({ latitude, longitude });
         getNearbyLocations(latitude, longitude);
         toast.success("Location found successfully");
@@ -62,22 +71,26 @@ const NearbyEmergencyLocations = () => {
         let errorMessage = "Unable to retrieve your location";
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = "Location access was denied";
+            errorMessage =
+              "Location access was denied. Please enable location services in your browser settings.";
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = "Location information is unavailable";
+            errorMessage =
+              "Location information is unavailable. Please try again or check your device settings.";
             break;
           case error.TIMEOUT:
-            errorMessage = "Location request timed out";
+            errorMessage =
+              "Location request timed out. Please check your internet connection and try again.";
             break;
         }
+        console.error("Geolocation error:", errorMessage);
         setError(errorMessage);
         toast.error(errorMessage);
         setIsLoading(false);
       },
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000, // Increased timeout to 10 seconds
         maximumAge: 0,
       }
     );
@@ -110,103 +123,113 @@ const NearbyEmergencyLocations = () => {
   };
 
   return (
-    <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-navi-400" />
-          Nearby Emergency Services
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {error && (
-          <div className="flex flex-col items-center gap-4 py-4">
-            <p className="text-red-400 text-sm">{error}</p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={fetchUserLocation}
-              className="text-navi-400 hover:text-navi-300"
-            >
-              <MapPin className="h-4 w-4 mr-2" />
-              Try Again
-            </Button>
-          </div>
-        )}
+    <div className="space-y-6">
+      {/* Map Component */}
+      <LocationMap currentLocation={userLocation} places={locations} />
 
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 text-navi-400 animate-spin mb-2" />
-            <p className="text-gray-400">Finding your location...</p>
-          </div>
-        ) : locations.length > 0 ? (
-          <div className="space-y-4">
-            {locations.map((location) => (
-              <div
-                key={location.name}
-                className="p-4 bg-gray-800/50 rounded-lg border border-white/10 hover:border-navi-500/50 transition-colors"
+      {/* List of Emergency Locations */}
+      <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5 text-navi-400" />
+            Nearby Emergency Services
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <div className="flex flex-col items-center gap-4 py-4">
+              <p className="text-red-400 text-sm">{error}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={fetchUserLocation}
+                className="text-navi-400 hover:text-navi-300"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gray-700/50 flex items-center justify-center">
-                    {getIcon(location.type)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-lg">{location.name}</h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-sm text-navi-400 bg-navi-400/10 px-2 py-0.5 rounded">
-                            {getTypeLabel(location.type)}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="text-sm text-gray-400">
-                        {location.distance.toFixed(1)} km away
-                      </span>
+                <MapPin className="h-4 w-4 mr-2" />
+                Try Again
+              </Button>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 text-navi-400 animate-spin mb-2" />
+              <p className="text-gray-400">Finding your location...</p>
+            </div>
+          ) : locations.length > 0 ? (
+            <div className="space-y-4">
+              {locations.map((location) => (
+                <div
+                  key={location.name}
+                  className="p-4 bg-gray-800/50 rounded-lg border border-white/10 hover:border-navi-500/50 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-700/50 flex items-center justify-center">
+                      {getIcon(location.type)}
                     </div>
-                    <p className="text-sm text-gray-400 mt-2">
-                      {location.vicinity}
-                    </p>
-                    <div className="flex gap-2 mt-3">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 px-3 text-blue-400 hover:text-blue-300 bg-blue-400/10"
-                        onClick={() =>
-                          (window.location.href = `tel:${location.phone}`)
-                        }
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        Call
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 px-3 text-navi-400 hover:text-navi-300 bg-navi-400/10"
-                        onClick={() => {
-                          if (userLocation) {
-                            const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${location.latitude},${location.longitude}`;
-                            window.open(url, "_blank");
-                          } else {
-                            toast.error("Location not available");
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-medium text-lg">
+                            {location.name}
+                          </h4>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-sm text-navi-400 bg-navi-400/10 px-2 py-0.5 rounded">
+                              {getTypeLabel(location.type)}
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-sm text-gray-400">
+                          {location.distance.toFixed(1)} km away
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-400 mt-2">
+                        {location.vicinity}
+                      </p>
+                      <div className="flex gap-2 mt-3">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 px-3 text-blue-400 hover:text-blue-300 bg-blue-400/10"
+                          onClick={() =>
+                            (window.location.href = `tel:${location.phone}`)
                           }
-                        }}
-                      >
-                        <Navigation className="h-4 w-4 mr-1" />
-                        Directions
-                      </Button>
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          Call
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 px-3 text-navi-400 hover:text-navi-300 bg-navi-400/10"
+                          onClick={() => {
+                            if (userLocation) {
+                              const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${location.latitude},${location.longitude}`;
+                              window.open(url, "_blank");
+                            } else {
+                              toast.error("Location not available");
+                            }
+                          }}
+                        >
+                          <Navigation className="h-4 w-4 mr-1" />
+                          Directions
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <p className="text-gray-400">No emergency locations found nearby</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-gray-400">
+                No emergency locations found nearby
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

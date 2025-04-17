@@ -5,12 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import LocationPage from "./pages/LocationPage";
 import CameraPage from "./pages/CameraPage";
 import EmergencyPage from "./pages/EmergencyPage";
 import AboutDevice from "./pages/AboutDevice";
 import NotFound from "./pages/NotFound";
 import NavigationPage from "./pages/NavigationPage";
+import LocationPage from "./pages/LocationPage";
 
 const queryClient = new QueryClient();
 
