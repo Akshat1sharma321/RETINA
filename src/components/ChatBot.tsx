@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X, Send } from "lucide-react";
@@ -16,12 +15,10 @@ const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      id: "1", 
-      text: "Hello! I'm NAVI Assistant. How can I help you today?", 
-      sender: "bot", 
-      timestamp: new Date() 
-    }
+    {
+      type: "assistant",
+      text: "Hello! I'm R.E.T.I.N.A Assistant. How can I help you today?",
+    },
   ]);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,37 +38,35 @@ const ChatBot = () => {
 
   const sendMessage = (e?: React.FormEvent) => {
     e?.preventDefault();
-    
+
     if (!message.trim()) return;
-    
+
     // Add user message
     const userMsg: Message = {
       id: Date.now().toString(),
       text: message,
       sender: "user",
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    
+
     setMessages((prev) => [...prev, userMsg]);
     setMessage("");
 
     // Simulate bot response
     setTimeout(() => {
-      const botResponses = [
-        "I'm here to help you with your NAVI smart glasses!",
-        "You can ask me about features, navigation, or how to use your device.",
-        "If you need emergency assistance, please go to the Emergency page.",
-        "Your NAVI glasses are designed to provide audio descriptions of your surroundings.",
-        "The camera feature allows caregivers to see what you're seeing in real-time."
+      const suggestions = [
+        "I'm here to help you with your R.E.T.I.N.A smart glasses!",
+        "Would you like to know about the available features?",
+        "Your R.E.T.I.N.A glasses are designed to provide audio descriptions of your surroundings.",
       ];
-      
+
       const botMsg: Message = {
         id: Date.now().toString(),
-        text: botResponses[Math.floor(Math.random() * botResponses.length)],
+        text: suggestions[Math.floor(Math.random() * suggestions.length)],
         sender: "bot",
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      
+
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   };
@@ -83,24 +78,26 @@ const ChatBot = () => {
           <div className="flex items-center justify-between p-3 bg-navi-900/40 border-b border-white/10">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <h3 className="font-medium">NAVI Assistant</h3>
+              <h3 className="font-medium">R.E.T.I.N.A Assistant</h3>
             </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               className="h-8 w-8 p-0 rounded-full"
               onClick={toggleChat}
             >
               <X size={16} />
             </Button>
           </div>
-          
+
           <ScrollArea className="h-[calc(100%-6rem)] p-3 overflow-y-auto">
             <div className="flex flex-col gap-3">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex ${
+                    msg.sender === "user" ? "justify-end" : "justify-start"
+                  }`}
                 >
                   <div
                     className={`max-w-[80%] p-3 rounded-lg ${
@@ -111,9 +108,9 @@ const ChatBot = () => {
                   >
                     <p>{msg.text}</p>
                     <p className="text-xs opacity-50 mt-1">
-                      {msg.timestamp.toLocaleTimeString([], { 
-                        hour: "2-digit", 
-                        minute: "2-digit" 
+                      {msg.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
                       })}
                     </p>
                   </div>
@@ -122,8 +119,11 @@ const ChatBot = () => {
               <div ref={messageEndRef} />
             </div>
           </ScrollArea>
-          
-          <form onSubmit={sendMessage} className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10 bg-gray-900/80">
+
+          <form
+            onSubmit={sendMessage}
+            className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10 bg-gray-900/80"
+          >
             <div className="flex gap-2">
               <Input
                 ref={inputRef}
@@ -133,14 +133,19 @@ const ChatBot = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 className="flex-1 bg-gray-800 border-gray-700"
               />
-              <Button type="submit" size="icon" variant="default" className="bg-navi-600 hover:bg-navi-700">
+              <Button
+                type="submit"
+                size="icon"
+                variant="default"
+                className="bg-navi-600 hover:bg-navi-700"
+              >
                 <Send size={16} />
               </Button>
             </div>
           </form>
         </div>
       )}
-      
+
       <Button
         onClick={toggleChat}
         size="icon"

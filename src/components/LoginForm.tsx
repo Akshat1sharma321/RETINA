@@ -1,9 +1,15 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -17,7 +23,7 @@ const LoginForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     // Simulating authentication
     setTimeout(() => {
       setIsLoading(false);
@@ -31,15 +37,19 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-md bg-black/40 backdrop-blur-xl border border-white/10">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center text-gradient">Welcome to NAVI</CardTitle>
-        <CardDescription className="text-center text-gray-400">
-          Sign in to continue to your dashboard
+        <CardTitle className="text-2xl font-bold text-center text-gradient">
+          Welcome to R.E.T.I.N.A
+        </CardTitle>
+        <CardDescription className="text-center">
+          Sign in to access your smart glasses
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Username</label>
+            <label className="text-sm font-medium text-gray-300">
+              Username
+            </label>
             <Input
               type="text"
               placeholder="Enter your username"
@@ -50,7 +60,9 @@ const LoginForm = () => {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Password</label>
+            <label className="text-sm font-medium text-gray-300">
+              Password
+            </label>
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
@@ -71,8 +83,8 @@ const LoginForm = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             className="w-full bg-navi-500 hover:bg-navi-600 text-white"
             disabled={isLoading}
           >

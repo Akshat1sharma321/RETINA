@@ -36,7 +36,7 @@ const Index = () => {
           <div className="bg-navi-600 text-white h-8 w-8 rounded-md flex items-center justify-center">
             <Glasses size={20} />
           </div>
-          <span className="text-2xl font-bold text-gradient">NAVI</span>
+          <span className="text-2xl font-bold text-gradient">R.E.T.I.N.A</span>
         </Link>
 
         <Button
@@ -57,9 +57,9 @@ const Index = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
-                NAVI's cutting-edge technology transforms visual information
-                into audio descriptions, helping visually impaired individuals
-                navigate and experience the world with confidence.
+                R.E.T.I.N.A's cutting-edge technology transforms visual
+                information into audio descriptions, helping visually impaired
+                individuals navigate and experience the world with confidence.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -132,7 +132,7 @@ const Index = () => {
                 About the Device
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                NAVI Smart Glasses is an innovative assistive technology
+                R.E.T.I.N.A Smart Glasses is an innovative assistive technology
                 designed to enhance independence and safety for visually
                 impaired individuals.
               </p>
@@ -181,8 +181,8 @@ const Index = () => {
                     <h3 className="text-2xl font-semibold">How It Works</h3>
                   </div>
                   <p className="text-gray-300 leading-relaxed">
-                    NAVI uses advanced computer vision and AI to analyze the
-                    surrounding environment, providing audio feedback about
+                    R.E.T.I.N.A uses advanced computer vision and AI to analyze
+                    the surrounding environment, providing audio feedback about
                     objects, people, and obstacles in real-time. The device
                     integrates with navigation systems to offer turn-by-turn
                     directions and can quickly connect to emergency services
@@ -246,10 +246,10 @@ const Index = () => {
                   </div>
                   <p className="text-gray-300 leading-relaxed">
                     Built with cutting-edge AI and machine learning algorithms,
-                    NAVI continuously learns and adapts to provide personalized
-                    assistance. The device features high-resolution cameras,
-                    advanced sensors, and powerful processing capabilities to
-                    deliver accurate and timely information.
+                    R.E.T.I.N.A continuously learns and adapts to provide
+                    personalized assistance. The device features high-resolution
+                    cameras, advanced sensors, and powerful processing
+                    capabilities to deliver accurate and timely information.
                   </p>
                 </div>
               </div>
@@ -262,11 +262,11 @@ const Index = () => {
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[300px] h-[300px] bg-navi-500/30 rounded-full filter blur-[100px] -z-10"></div>
 
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Experience NAVI?
+              Ready to Experience R.E.T.I.N.A?
             </h2>
             <p className="text-gray-300 mb-8 max-w-xl">
               Join thousands of users who are discovering a new level of
-              independence with NAVI smart glasses.
+              independence with R.E.T.I.N.A smart glasses.
             </p>
 
             <Button
@@ -287,7 +287,9 @@ const Index = () => {
                   <div className="bg-navi-600 text-white h-10 w-10 rounded-md flex items-center justify-center">
                     <Glasses size={24} />
                   </div>
-                  <span className="text-2xl font-bold text-gradient">NAVI</span>
+                  <span className="text-2xl font-bold text-gradient">
+                    R.E.T.I.N.A
+                  </span>
                 </div>
                 <p className="text-gray-400 text-center md:text-left max-w-xs">
                   Empowering visually impaired individuals with cutting-edge
@@ -327,7 +329,7 @@ const Index = () => {
 
             <div className="pt-8 border-t border-white/10">
               <div className="text-gray-500 text-sm text-center">
-                &copy; 2025 NAVI Technology. All rights reserved.
+                &copy; 2025 R.E.T.I.N.A Technology. All rights reserved.
               </div>
             </div>
           </div>

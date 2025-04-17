@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const CameraFeed = () => {
   const [isLive, setIsLive] = useState(true);
   const [activeTab, setActiveTab] = useState("live");
-  
+
   const toggleLive = () => {
     setIsLive(!isLive);
   };
@@ -37,7 +36,7 @@ const CameraFeed = () => {
       time: "10:45 AM",
       duration: "32:17",
       thumbnail: "bg-gradient-to-br from-gray-700 to-gray-800",
-    }
+    },
   ];
 
   const mockPhotos = [
@@ -76,7 +75,7 @@ const CameraFeed = () => {
       <div>
         <h2 className="text-2xl font-semibold text-white mb-1">Camera Feed</h2>
         <p className="text-gray-400">
-          View the live feed from the NAVI smart glasses
+          View the live feed from the R.E.T.I.N.A smart glasses
         </p>
       </div>
 
@@ -97,7 +96,11 @@ const CameraFeed = () => {
                   <span className="text-sm text-white font-medium">LIVE</span>
                 </div>
                 <div className="absolute bottom-4 right-4 text-sm text-gray-300">
-                  {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                  {new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </div>
               </div>
             ) : (
@@ -108,13 +111,15 @@ const CameraFeed = () => {
             )}
           </div>
         </div>
-        
+
         <CardContent className="p-4">
           <div className="flex justify-between items-center">
             <span className="text-gray-400">
-              {isLive ? "Streaming live from NAVI device" : "Feed paused"}
+              {isLive
+                ? "Streaming live from R.E.T.I.N.A device"
+                : "Feed paused"}
             </span>
-            <Button 
+            <Button
               variant="secondary"
               size="sm"
               onClick={toggleLive}
@@ -133,9 +138,9 @@ const CameraFeed = () => {
           </div>
         </CardContent>
       </Card>
-      
-      <Tabs 
-        defaultValue="videos" 
+
+      <Tabs
+        defaultValue="videos"
         className="w-full"
         value={activeTab}
         onValueChange={setActiveTab}
@@ -144,11 +149,14 @@ const CameraFeed = () => {
           <TabsTrigger value="videos">Recorded Videos</TabsTrigger>
           <TabsTrigger value="photos">Captured Photos</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="videos" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {mockVideos.map(video => (
-              <Card key={video.id} className="border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden hover:bg-black/60 transition-colors cursor-pointer">
+            {mockVideos.map((video) => (
+              <Card
+                key={video.id}
+                className="border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden hover:bg-black/60 transition-colors cursor-pointer"
+              >
                 <div className={`aspect-video relative ${video.thumbnail}`}>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Play className="w-12 h-12 opacity-80 text-white" />
@@ -159,8 +167,14 @@ const CameraFeed = () => {
                 </div>
                 <CardContent className="p-3">
                   <h4 className="font-medium">{video.title}</h4>
-                  <p className="text-sm text-gray-400">{video.date} • {video.time}</p>
-                  <Button size="sm" variant="ghost" className="mt-2 w-full flex items-center justify-center gap-2">
+                  <p className="text-sm text-gray-400">
+                    {video.date} • {video.time}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="mt-2 w-full flex items-center justify-center gap-2"
+                  >
                     <Download className="h-4 w-4" /> Download
                   </Button>
                 </CardContent>
@@ -168,16 +182,27 @@ const CameraFeed = () => {
             ))}
           </div>
         </TabsContent>
-        
+
         <TabsContent value="photos" className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {mockPhotos.map(photo => (
-              <Card key={photo.id} className="border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden hover:bg-black/60 transition-colors cursor-pointer">
-                <div className={`aspect-square relative ${photo.thumbnail}`}></div>
+            {mockPhotos.map((photo) => (
+              <Card
+                key={photo.id}
+                className="border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden hover:bg-black/60 transition-colors cursor-pointer"
+              >
+                <div
+                  className={`aspect-square relative ${photo.thumbnail}`}
+                ></div>
                 <CardContent className="p-3">
                   <h4 className="font-medium">{photo.title}</h4>
-                  <p className="text-sm text-gray-400">{photo.date} • {photo.time}</p>
-                  <Button size="sm" variant="ghost" className="mt-2 w-full flex items-center justify-center gap-2">
+                  <p className="text-sm text-gray-400">
+                    {photo.date} • {photo.time}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="mt-2 w-full flex items-center justify-center gap-2"
+                  >
                     <Download className="h-4 w-4" /> Download
                   </Button>
                 </CardContent>

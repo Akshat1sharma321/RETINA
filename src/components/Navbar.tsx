@@ -59,7 +59,9 @@ const Navbar = () => {
           } transition-all duration-300`}
         >
           <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-gradient">NAVI</span>
+            <span className="text-2xl font-bold text-gradient">
+              R.E.T.I.N.A
+            </span>
           </Link>
           <Button
             variant="ghost"
@@ -107,7 +109,9 @@ const Navbar = () => {
       <div className="hidden lg:flex flex-col h-screen fixed left-0 top-0 w-64 bg-black/60 backdrop-blur-xl border-r border-white/10 z-40">
         <div className="p-6">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-gradient">NAVI</span>
+            <span className="text-2xl font-bold text-gradient">
+              R.E.T.I.N.A
+            </span>
           </Link>
         </div>
 
