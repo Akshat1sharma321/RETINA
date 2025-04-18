@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Loader2, Navigation, Phone } from "lucide-react";
+import {
+  MapPin,
+  Loader2,
+  Navigation,
+  Phone,
+  UtensilsCrossed,
+  Hotel,
+  Train,
+  Bus,
+} from "lucide-react";
 import { toast } from "sonner";
 import { getNearbyPlaces, Place } from "@/utils/geminiApi";
 import CurrentLocationMap from "./CurrentLocationMap";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface LocationData {
   latitude: number;
@@ -12,6 +28,14 @@ interface LocationData {
   accuracy?: number;
   speed?: number;
 }
+
+// Place types configuration
+const placeTypes = [
+  { value: "restaurant", label: "Food Places", icon: UtensilsCrossed },
+  { value: "hotel", label: "Stay", icon: Hotel },
+  { value: "train_station", label: "Train Stations", icon: Train },
+  { value: "bus_station", label: "Bus Stations", icon: Bus },
+];
 
 // DTU Location
 const DTU_LOCATION = {
@@ -48,9 +72,10 @@ function deg2rad(deg: number): number {
 
 const Location = () => {
   const [location, setLocation] = useState<LocationData | null>(null);
-  const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
+  const [selectedType, setSelectedType] = useState<string>("restaurant");
   const [isTracking, setIsTracking] = useState(false);
   const [watchId, setWatchId] = useState<number | null>(null);
 
@@ -76,7 +101,8 @@ const Location = () => {
           // Use Gemini API to fetch nearby places
           const places = await getNearbyPlaces(
             locationData.latitude,
-            locationData.longitude
+            locationData.longitude,
+            selectedType
           );
           setNearbyPlaces(places);
         } catch (error) {
@@ -133,7 +159,8 @@ const Location = () => {
           // Use Gemini API to fetch nearby places when location changes
           const places = await getNearbyPlaces(
             locationData.latitude,
-            locationData.longitude
+            locationData.longitude,
+            selectedType
           );
           setNearbyPlaces(places);
         } catch (error) {
@@ -174,19 +201,20 @@ const Location = () => {
         navigator.geolocation.clearWatch(watchId);
       }
     };
-  }, []);
+  }, [selectedType]);
 
-  const getTypeColor = (type: string): string => {
-    switch (type.toLowerCase()) {
-      case "hospital":
-        return "#EF4444"; // Red
-      case "police":
-        return "#3B82F6"; // Blue
-      case "pharmacy":
-        return "#10B981"; // Green
-      default:
-        return "#6B7280"; // Gray
+  const getTypeIcon = (type: string) => {
+    const placeType = placeTypes.find((t) => t.value === type);
+    if (placeType) {
+      const Icon = placeType.icon;
+      return <Icon className="h-5 w-5" />;
     }
+    return <MapPin className="h-5 w-5" />;
+  };
+
+  const getTypeLabel = (type: string): string => {
+    const placeType = placeTypes.find((t) => t.value === type);
+    return placeType?.label || type;
   };
 
   const formatDistance = (distance: number): string => {
@@ -203,7 +231,7 @@ const Location = () => {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-navi-400" />
-            Your Current Location
+            Navigation
           </div>
           <Button
             variant="outline"
@@ -287,36 +315,97 @@ const Location = () => {
               </div>
             </div>
 
-            {/* DTU Information */}
+            {/* Place Type Selection */}
             <div className="p-4 bg-gray-800/50 rounded-lg border border-white/10">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-                  <MapPin className="h-5 w-5 text-indigo-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-lg">{DTU_LOCATION.name}</h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {DTU_LOCATION.address}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="mt-3 h-8 px-3 text-navi-400 hover:text-navi-300 bg-navi-400/10"
-                    onClick={() => {
-                      const url = `https://www.google.com/maps/dir/?api=1&destination=${DTU_LOCATION.latitude},${DTU_LOCATION.longitude}`;
-                      if (location) {
-                        url +
-                          `&origin=${location.latitude},${location.longitude}`;
-                      }
-                      window.open(url, "_blank");
-                    }}
-                  >
-                    <Navigation className="h-4 w-4 mr-1" />
-                    Get Directions
-                  </Button>
-                </div>
-              </div>
+              <label className="text-sm text-gray-400 mb-2 block">
+                Search for nearby places
+              </label>
+              <Select
+                value={selectedType}
+                onValueChange={(value) => setSelectedType(value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select place type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {placeTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        {getTypeIcon(type.value)}
+                        <span>{type.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            {/* Nearby Places */}
+            {nearbyPlaces.length > 0 && (
+              <div className="space-y-4">
+                {nearbyPlaces.map((place) => (
+                  <div
+                    key={place.name}
+                    className="p-4 bg-gray-800/50 rounded-lg border border-white/10"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gray-700/50 flex items-center justify-center">
+                        {getTypeIcon(place.type)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-medium text-lg">
+                              {place.name}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-sm text-navi-400 bg-navi-400/10 px-2 py-0.5 rounded">
+                                {getTypeLabel(place.type)}
+                              </span>
+                              <span className="text-sm text-gray-400">
+                                {place.distance.toFixed(1)} km away
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {place.vicinity && (
+                          <p className="text-sm text-gray-400 mt-2">
+                            {place.vicinity}
+                          </p>
+                        )}
+                        <div className="flex gap-2 mt-3">
+                          {place.phone && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 px-3 text-blue-400 hover:text-blue-300 bg-blue-400/10"
+                              onClick={() =>
+                                (window.location.href = `tel:${place.phone}`)
+                              }
+                            >
+                              <Phone className="h-4 w-4 mr-1" />
+                              Call
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-3 text-navi-400 hover:text-navi-300 bg-navi-400/10"
+                            onClick={() => {
+                              const url = `https://www.google.com/maps/dir/?api=1&origin=${location.latitude},${location.longitude}&destination=${place.latitude},${place.longitude}`;
+                              window.open(url, "_blank");
+                            }}
+                          >
+                            <Navigation className="h-4 w-4 mr-1" />
+                            Get Directions
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-4">

@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import LoginForm from "@/components/LoginForm";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import image1 from "@/images/image1.jpeg";
+import image2 from "@/images/image2.jpeg";
+import image3 from "@/images/image3.jpeg";
 import {
   ArrowRight,
   Eye,
@@ -39,13 +43,16 @@ const Index = () => {
           <span className="text-2xl font-bold text-gradient">R.E.T.I.N.A</span>
         </Link>
 
-        <Button
-          onClick={handleLoginClick}
-          className="bg-navi-600 hover:bg-navi-700 text-white"
-        >
-          Sign In
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-6">
+          <ThemeToggle />
+          <Button
+            onClick={handleLoginClick}
+            className="bg-navi-600 hover:bg-navi-700 text-white px-8"
+          >
+            Sign In
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </header>
 
       <main className="min-h-screen">
@@ -88,7 +95,7 @@ const Index = () => {
                 className="bg-black/20 rounded-2xl overflow-hidden"
               >
                 <img
-                  src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800"
+                  src={image1}
                   alt="A person wearing smart glasses with AR visual assistance overlay"
                   className="object-cover w-full h-full opacity-90 hover:opacity-100 transition-opacity"
                 />
@@ -100,7 +107,7 @@ const Index = () => {
             <div className="glass p-4 rounded-2xl overflow-hidden">
               <AspectRatio ratio={16 / 9}>
                 <img
-                  src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?auto=format&fit=crop&w=800"
+                  src={image2}
                   alt="Advanced AI technology helping visually impaired users navigate"
                   className="object-cover w-full h-full rounded-xl"
                 />
@@ -109,7 +116,7 @@ const Index = () => {
             <div className="glass p-4 rounded-2xl overflow-hidden">
               <AspectRatio ratio={16 / 9}>
                 <img
-                  src="https://images.unsplash.com/photo-1493962853295-0fd70327578a?auto=format&fit=crop&w=800"
+                  src={image3}
                   alt="Real-time object detection and environment description"
                   className="object-cover w-full h-full rounded-xl"
                 />
@@ -261,17 +268,17 @@ const Index = () => {
           <div className="max-w-4xl mx-auto glass rounded-2xl p-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[300px] h-[300px] bg-navi-500/30 rounded-full filter blur-[100px] -z-10"></div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 dark:text-navi-400 light:text-[#4461F2]">
               Ready to Experience R.E.T.I.N.A?
             </h2>
-            <p className="text-gray-300 mb-8 max-w-xl">
+            <p className="dark:text-white light:text-[#4461F2]/70 mb-8 max-w-xl">
               Join thousands of users who are discovering a new level of
               independence with R.E.T.I.N.A smart glasses.
             </p>
 
             <Button
               onClick={handleLoginClick}
-              className="bg-navi-600 hover:bg-navi-700 text-white px-8 py-6 text-lg"
+              className="dark:bg-navi-600 dark:hover:bg-navi-700 light:bg-[#4461F2] light:hover:bg-[#4461F2]/90 text-white px-8 py-6 text-lg"
             >
               Sign In to Dashboard
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -316,12 +323,6 @@ const Index = () => {
                     className="text-gray-400 hover:text-white transition-colors"
                   >
                     Emergency
-                  </Link>
-                  <Link
-                    to="/location"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Location
                   </Link>
                 </div>
               </div>

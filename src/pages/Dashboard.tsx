@@ -68,70 +68,80 @@ const Dashboard = () => {
 
       <main className="lg:ml-64 pt-16 lg:pt-6 min-h-screen">
         <div className="container px-4 py-6">
-          <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-6 text-[#6B5B95]">Dashboard</h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="border border-white/10 bg-black/40 backdrop-blur-sm col-span-1 lg:col-span-2">
+            <Card className="border border-[#C4D9FF] bg-black/40 backdrop-blur-sm col-span-1 lg:col-span-2">
               <CardHeader className="pb-2">
-                <CardTitle>Quick Access</CardTitle>
+                <CardTitle className="text-white">Quick Access</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Card
-                  className="border border-white/10 bg-gray-900/40 hover:bg-gray-900/80 cursor-pointer transition-colors"
+                  className="border border-[#C4D9FF] bg-navi-600/20 hover:bg-navi-600/40 hover:text-navi-600 text-navi-600/40 cursor-pointer   transition-colors"
                   onClick={() => navigate("/location")}
                 >
                   <CardContent className="p-4 flex flex-col items-center text-center">
-                    <div className="w-10 h-10 bg-navi-600/40 flex items-center justify-center rounded-lg mb-2 text-navi-400">
+                    <div className="w-10 h-10 bg-[#C5BAFF]/20 flex items-center justify-center rounded-lg mb-2 text-white">
                       <MapPin size={20} />
                     </div>
-                    <p className="font-medium">Location</p>
+                    <p className="font-medium hover:text-navi-600 text-white ">
+                      Location
+                    </p>
                   </CardContent>
                 </Card>
 
                 <Card
-                  className="border border-white/10 bg-gray-900/40 hover:bg-gray-900/80 cursor-pointer transition-colors"
+                  className="border border-[#C4D9FF]  bg-navi-600/20 hover:bg-navi-600/40 hover:text-navi-600 text-navi-600/40cursor-pointer transition-colors"
                   onClick={() => navigate("/camera")}
                 >
                   <CardContent className="p-4 flex flex-col items-center text-center">
-                    <div className="w-10 h-10 bg-navi-600/40 flex items-center justify-center rounded-lg mb-2 text-navi-400">
+                    <div className="w-10 h-10 bg-[#C5BAFF]/20 flex items-center justify-center rounded-lg mb-2 text-white">
                       <Eye size={20} />
                     </div>
-                    <p className="font-medium">Camera</p>
+                    <p className="font-medium  hover:text-navi-600 text-white">
+                      Camera
+                    </p>
                   </CardContent>
                 </Card>
 
                 <Card
-                  className="border border-white/10 bg-gray-900/40 hover:bg-gray-900/80 cursor-pointer transition-colors"
+                  className="border border-[#C4D9FF]  bg-navi-600/20 hover:bg-navi-600/40 hover:text-navi-600 text-navi-600/40 cursor-pointer transition-colors"
                   onClick={() => navigate("/emergency")}
                 >
                   <CardContent className="p-4 flex flex-col items-center text-center">
-                    <div className="w-10 h-10 bg-red-500/20 flex items-center justify-center rounded-lg mb-2 text-red-400">
+                    <div className="w-10 h-10 bg-[#C5BAFF]/20 flex items-center justify-center rounded-lg mb-2 text-white">
                       <AlertCircle size={20} />
                     </div>
-                    <p className="font-medium">Emergency</p>
+                    <p className="font-medium  hover:text-navi-600 text-white">
+                      Emergency
+                    </p>
                   </CardContent>
                 </Card>
               </CardContent>
             </Card>
 
-            <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+            <Card className="border border-[#C4D9FF] bg-black/40 backdrop-blur-sm">
               <CardHeader className="pb-2">
-                <CardTitle>Recent Activity</CardTitle>
+                <CardTitle className=" text-blue-400">
+                  Recent Activity
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {recentActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-navi-600/20 flex items-center justify-center text-navi-400 mt-1">
+                    <div className="w-8 h-8 rounded-full bg-[#C5BAFF]/20 flex items-center justify-center text-[#6B5B95] mt-1">
                       {activity.icon}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-medium">{activity.title}</p>
-                        <span className="text-xs text-gray-400">
+                        <p className="font-medium text-navi-400">
+                          {activity.title}
+                        </p>
+                        <span className="text-xs text-white">
                           {activity.time}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-white">
                         {activity.description}
                       </p>
                     </div>

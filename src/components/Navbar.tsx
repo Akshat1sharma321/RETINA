@@ -9,7 +9,6 @@ import {
   Menu,
   X,
   LogOut,
-  Navigation2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -17,10 +16,8 @@ import { toast } from "sonner";
 const navItems = [
   { path: "/dashboard", name: "Home", icon: Home },
   { path: "/location", name: "Location", icon: MapPin },
-  { path: "/navigation", name: "Navigation", icon: Navigation2 },
   { path: "/camera", name: "Camera", icon: Camera },
   { path: "/emergency", name: "Emergency", icon: AlertCircle },
-  { path: "/about-device", name: "About Device", icon: Info },
 ];
 
 const Navbar = () => {
@@ -54,7 +51,7 @@ const Navbar = () => {
         <div
           className={`flex justify-between items-center py-2 px-4 ${
             scrollPosition > 10
-              ? "bg-black/80 backdrop-blur-lg border-b border-white/10"
+              ? "dark:bg-black/80 dark:border-white/10 light:bg-[#4461F2]/80 light:border-[#E6D9FF] backdrop-blur-lg border-b"
               : "bg-transparent"
           } transition-all duration-300`}
         >
@@ -65,7 +62,7 @@ const Navbar = () => {
           </Link>
           <Button
             variant="ghost"
-            className="p-2"
+            className="p-2 dark:text-white dark:hover:text-gray-300 light:text-[#FAF8FF] light:hover:text-[#E6D9FF]"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -74,16 +71,22 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md pt-16 flex flex-col animate-fade-in">
+          <div className="fixed inset-0 z-40 dark:bg-black/95 light:bg-[#4461F2]/95 backdrop-blur-md pt-16 flex flex-col animate-fade-in">
             <div className="flex flex-col space-y-2 px-4">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 text-lg rounded-md ${
+                  className={`flex items-center gap-2 px-4 py-3 text-lg rounded-md ${
                     isActive(item.path)
-                      ? "bg-navi-500/20 text-navi-400"
-                      : "hover:bg-white/5"
+                      ? "dark:bg-navi-500/20 dark:text-navi-400 light:bg-[#9747FF]/20 light:text-[#FAF8FF]"
+                      : "dark:hover:bg-white/5 dark:text-white light:text-[#E6D9FF] light:hover:bg-[#9747FF]/10 light:hover:text-[#FAF8FF]"
+                  } ${
+                    item.name === "Location" ||
+                    item.name === "Camera" ||
+                    item.name === "Emergency"
+                      ? "dark:bg-navi-500/10 light:bg-[#9747FF]/10 dark:hover:bg-navi-500/20 light:hover:bg-[#9747FF]/20"
+                      : ""
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -94,7 +97,7 @@ const Navbar = () => {
 
               <Button
                 variant="ghost"
-                className="flex items-center gap-3 px-4 py-3 text-lg rounded-md mt-auto text-red-400 hover:bg-red-500/10 hover:text-red-300 justify-start font-normal"
+                className="flex items-center gap-4 px-4 py-3 text-lg rounded-md mt-auto text-red-400 hover:bg-red-500/10 hover:text-red-300 justify-start font-normal"
                 onClick={handleLogout}
               >
                 <LogOut size={20} />
@@ -106,7 +109,7 @@ const Navbar = () => {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex flex-col h-screen fixed left-0 top-0 w-64 bg-black/60 backdrop-blur-xl border-r border-white/10 z-40">
+      <div className="hidden lg:flex flex-col h-screen fixed left-0 top-0 w-64 dark:bg-black/60 dark:border-white/10 light:bg-[#4461F2]/90 light:border-[#E6D9FF] backdrop-blur-xl border-r z-40">
         <div className="p-6">
           <Link to="/dashboard" className="flex items-center gap-2">
             <span className="text-2xl font-bold text-gradient">
@@ -122,8 +125,14 @@ const Navbar = () => {
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors duration-200 ${
                 isActive(item.path)
-                  ? "bg-navi-500/20 text-navi-400"
-                  : "hover:bg-white/5"
+                  ? "dark:bg-navi-500/20 dark:text-navi-400 light:bg-[#9747FF]/20 light:text-[#FAF8FF]"
+                  : "dark:hover:bg-white/5 dark:text-white light:text-[#E6D9FF] light:hover:bg-[#9747FF]/10 light:hover:text-[#FAF8FF]"
+              } ${
+                item.name === "Location" ||
+                item.name === "Camera" ||
+                item.name === "Emergency"
+                  ? "dark:bg-navi-500/10 light:bg-[#9747FF]/10 dark:hover:bg-navi-500/20 light:hover:bg-[#9747FF]/20"
+                  : ""
               }`}
             >
               <item.icon size={20} />
@@ -132,10 +141,10 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 dark:border-white/10 light:border-[#E6D9FF] border-t">
           <Button
             variant="ghost"
-            className="flex items-center w-full gap-3 text-red-400 hover:bg-red-500/10 hover:text-red-300 justify-start"
+            className="flex items-center w-full gap-4 px-6 text-red-400 hover:bg-red-500/10 hover:text-red-300 justify-start"
             onClick={handleLogout}
           >
             <LogOut size={18} />

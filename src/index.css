@@ -1,60 +1,177 @@
+/* Import Gilroy font */
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Using dark theme by default */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Light theme with pastel purples replacing grays */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 228 89% 61%; /* #4461F2 */
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 264 100% 99%; /* #FAF8FF - Very light pastel purple */
+    --card-foreground: 228 89% 61%; /* #4461F2 */
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 264 100% 99%; /* #FAF8FF */
+    --popover-foreground: 228 89% 61%; /* #4461F2 */
 
-    --primary: 252 87% 69%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 228 89% 61%; /* #4461F2 - Royal blue */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 271 100% 64%; /* #9747FF - Purple */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 264 80% 96%; /* #F3EBFF - Soft pastel purple */
+    --muted-foreground: 228 89% 61%; /* #4461F2 */
 
-    --accent: 255 90% 70%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 271 100% 64%; /* #9747FF */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%; /* #EE2B2B */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 252 87% 69%;
+    --border: 264 80% 92%; /* #E6D9FF - Light pastel purple */
+    --input: 264 80% 92%; /* #E6D9FF */
+    --ring: 228 89% 61%; /* #4461F2 */
 
-    --radius: 0.75rem;
+    --radius: 1rem;
+
+    /* Font family variable */
+    --font-gilroy: "Gilroy", system-ui, sans-serif;
+  }
+
+  .dark {
+    --background: 260 31% 11%; /* #1A1625 - Dark purple background */
+    --foreground: 0 0% 100%; /* #FFFFFF */
+
+    --card: 260 30% 15%; /* #231F33 */
+    --card-foreground: 252 100% 87%; /* #C5BAFF */
+
+    --popover: 260 30% 15%; /* #231F33 */
+    --popover-foreground: 252 100% 87%; /* #C5BAFF */
+
+    --primary: 252 100% 87%; /* #C5BAFF */
+    --primary-foreground: 260 31% 11%; /* #1A1625 */
+
+    --secondary: 260 30% 15%; /* #231F33 */
+    --secondary-foreground: 252 100% 87%; /* #C5BAFF */
+
+    --muted: 260 30% 20%; /* #2D2842 */
+    --muted-foreground: 252 100% 87%; /* #C5BAFF */
+
+    --accent: 252 91% 64%; /* #7C4DFF */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --destructive: 0 84% 60%; /* #EE2B2B */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --border: 260 30% 15%; /* #231F33 */
+    --input: 260 30% 15%; /* #231F33 */
+    --ring: 252 100% 87%; /* #C5BAFF */
   }
 }
 
 @layer base {
   * {
-    @apply border-border selection:bg-navi-500/20 selection:text-navi-100;
-  }
-
-  body {
-    @apply bg-background text-foreground antialiased min-h-screen overflow-x-hidden;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-    background: radial-gradient(
-      circle at 50% 50%,
-      hsl(252, 87%, 10%),
-      hsl(240, 10%, 3.9%)
-    );
-    background-attachment: fixed;
+    @apply border-border selection:bg-[#9747FF]/20 selection:text-[#4461F2];
   }
 
   html {
     @apply scroll-smooth;
+    font-family: var(--font-gilroy);
+  }
+
+  body {
+    @apply bg-[#FAF8FF] text-[#4461F2] antialiased min-h-screen overflow-x-hidden;
+    font-family: var(--font-gilroy);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Apply Gilroy to headings with ExtraBold weight */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-gilroy);
+    font-weight: 800;
+    @apply text-[#4461F2];
+  }
+
+  /* Apply Gilroy Light to regular text */
+  p,
+  span,
+  div,
+  button,
+  input,
+  textarea {
+    font-family: var(--font-gilroy);
+    font-weight: 300;
+  }
+
+  body.light {
+    background: #faf8ff;
+    position: relative;
+  }
+
+  body.light::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      #faf8ff 0%,
+      #f3ebff 25%,
+      #e6d9ff 50%,
+      #4461f2 75%,
+      #9747ff 100%
+    );
+    opacity: 0.05;
+    z-index: -1;
+  }
+
+  body.dark {
+    @apply bg-[#1A1625];
+    position: relative;
+  }
+
+  body.dark::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      #1a1625 0%,
+      #231f33 25%,
+      #2d2842 50%,
+      #7c4dff 75%,
+      #1a1625 100%
+    );
+    opacity: 0.1;
+    z-index: -1;
   }
 }
 
@@ -69,10 +186,96 @@
   }
 
   .glass {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10;
+    @apply backdrop-blur-xl border border-[#E6D9FF];
+    background: #231f33 25%;
+    box-shadow: 0 8px 24px rgba(151, 71, 255, 0.08);
   }
 
   .text-gradient {
-    @apply bg-gradient-to-br from-navi-400 via-navi-500 to-purple-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-br from-[#4461F2] via-[#9747FF] to-[#FAF8FF] bg-clip-text text-transparent;
   }
+
+  /* Color palette utility classes */
+  .bg-base {
+    background-color: #faf8ff;
+  }
+
+  .bg-surface {
+    background-color: #f3ebff;
+  }
+
+  .bg-accent {
+    background-color: #e6d9ff;
+  }
+
+  .bg-primary {
+    background-color: #4461f2;
+  }
+
+  .text-base {
+    color: #faf8ff;
+  }
+
+  .text-surface {
+    color: #f3ebff;
+  }
+
+  .text-accent {
+    color: #e6d9ff;
+  }
+
+  .text-primary {
+    color: #4461f2;
+  }
+
+  .border-accent {
+    border-color: #e6d9ff;
+  }
+
+  /* Light theme specific styles */
+  .light {
+    --theme-base: #faf8ff;
+    --theme-surface: #f3ebff;
+    --theme-accent: #e6d9ff;
+    --theme-primary: #4461f2;
+  }
+
+  .light .hover-effect:hover {
+    background-color: #f3ebff;
+    border-color: #e6d9ff;
+  }
+
+  .light .active-effect:active {
+    background-color: #e6d9ff;
+  }
+
+  .light .card {
+    background-color: #faf8ff;
+    border: 1px solid #e6d9ff;
+    box-shadow: 0 8px 24px rgba(151, 71, 255, 0.08);
+    border-radius: 1rem;
+  }
+
+  .light .button {
+    background-color: #4461f2;
+    color: #ffffff;
+    border-radius: 0.75rem;
+  }
+
+  .light .button:hover {
+    background-color: #9747ff;
+  }
+
+  .light .input {
+    background-color: #f3ebff;
+    border: 1px solid #e6d9ff;
+    color: #4461f2;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Add smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
 }

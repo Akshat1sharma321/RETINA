@@ -20,7 +20,7 @@ const LocationPage = () => {
 
       <main className="lg:ml-64 pt-16 lg:pt-6 min-h-screen">
         <div className="container px-4 py-6">
-          <h1 className="text-3xl font-bold mb-6">Location</h1>
+          <h1 className="text-3xl font-bold mb-6">Navigation</h1>
           <Location />
         </div>
       </main>
